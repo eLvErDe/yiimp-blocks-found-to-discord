@@ -147,9 +147,9 @@ async def post_events_discord(url, queue, d_markets_stocks_exchange, d_markets_c
                     else:
                         coin_amount_btc = None
 
-                #async with aiohttp.ClientSession() as session:
-                #    async with session.post(url, json={ 'content': message }) as resp:
-                #        resp.raise_for_status()
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(url, json={ 'content': message }) as resp:
+                        resp.raise_for_status()
 
                 logger.info('Message "%s" successfully posted to Discord', message)
 
