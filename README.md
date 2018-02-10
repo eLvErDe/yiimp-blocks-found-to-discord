@@ -15,14 +15,14 @@ sudo apt install python3-aiohttp python3-bs4
 
 2. Install script
 ```
-sudo wget https://raw.githubusercontent.com/eLvErDe/yiimp-blocks-found-to-discord/yiimp-blocks-found-to-discord.py -O /usr/local/bin/yiimp-blocks-found-to-discord.py
+sudo wget https://raw.githubusercontent.com/eLvErDe/yiimp-blocks-found-to-discord/master/yiimp-blocks-found-to-discord.py -O /usr/local/bin/yiimp-blocks-found-to-discord.py
 sudo chmod 0755 /usr/local/bin/yiimp-blocks-found-to-discord.py
 ```
 
 3. Register as a systemd service
 ```
-sudo wget https://raw.githubusercontent.com/eLvErDe/yiimp-blocks-found-to-discord/systemd/service -O /etc/systemd/system/yiimp-blocks-found-to-discord.service 
-sudo wget https://raw.githubusercontent.com/eLvErDe/yiimp-blocks-found-to-discord/systemd/default -O /etc/default/yiimp-blocks-found-to-discord
+sudo wget https://raw.githubusercontent.com/eLvErDe/yiimp-blocks-found-to-discord/master/systemd/service -O /etc/systemd/system/yiimp-blocks-found-to-discord.service 
+sudo wget https://raw.githubusercontent.com/eLvErDe/yiimp-blocks-found-to-discord/master/systemd/default -O /etc/default/yiimp-blocks-found-to-discord
 sudo systemctl daemon-reload
 ```
 
