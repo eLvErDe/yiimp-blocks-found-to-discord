@@ -53,6 +53,7 @@ async def refresh_stocks_exchange_markets(url, d_markets):
                 raise
             except Exception as e:
                 logger.exception('Exception occurred: %s: %s', e.__class__.__name__, e)
+                await asyncio.sleep(60)
 
     except asyncio.CancelledError:
         logger.info('Exiting on cancel signal')
@@ -79,6 +80,7 @@ async def refresh_cryptopia_markets(url, d_markets):
                 raise
             except Exception as e:
                 logger.exception('Exception occurred: %s: %s', e.__class__.__name__, e)
+                await asyncio.sleep(60)
 
     except asyncio.CancelledError:
         logger.info('Exiting on cancel signal')
@@ -111,6 +113,7 @@ async def poll_yiimp_events(url, queue):
                 raise
             except Exception as e:
                 logger.exception('Exception occurred: %s: %s', e.__class__.__name__, e)
+                await asyncio.sleep(5)
 
     except asyncio.CancelledError:
         logger.info('Exiting on cancel signal')
