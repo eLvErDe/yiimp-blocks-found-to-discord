@@ -10,7 +10,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 
 
-async def parse_events(html, queue, previous_poll_dt):
+async def parse_events(html, queue, share_state_d):
 
     logger = logging.getLogger('parse_events')
 
@@ -21,16 +21,17 @@ async def parse_events(html, queue, previous_poll_dt):
         logger.error('Unable to find table element in HTML')
         return
 
-    for row in table.findAll('tr')[1:]:
+    for row in table.findAll('tr')[1:][::-1]:
         col = row.findAll('td')
         coin = col[2].getText()
         coin_amount = float(coin. split(' ')[0])
         coin_name = ' '.join(coin. split(' ')[1:])
         time = col[5].find('span').attrs['title']
         dt = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
-        if dt >= previous_poll_dt:
+        if dt > share_state_d['previous_poll_dt']:
             logger.info('New event found while parsing: %d %s found at %s', coin_amount, coin_name, dt)
             queue.put_nowait((dt, coin_name, coin_amount))
+            share_state_d['previous_poll_dt'] = dt
 
 
 async def refresh_stocks_exchange_markets(url, d_markets):
@@ -90,9 +91,11 @@ async def refresh_cryptopia_markets(url, d_markets):
 async def poll_yiimp_events(url, queue):
 
     logger = logging.getLogger('poll_yiimp_events')
-    previous_poll_dt = datetime.datetime.utcnow()
+    # Use a dict here, easier to keep reference by updating
+    share_state_d = dict()
+    share_state_d['previous_poll_dt'] = datetime.datetime.utcnow()
     # For testing purpose
-    #previous_poll_dt = previous_poll_dt - datetime.timedelta(minutes=60)
+    #share_state_d['previous_poll_dt'] = share_state_d['previous_poll_dt'] - datetime.timedelta(minutes=240)
 
     # Give other coroutines enought time to refresh markets prices
     with suppress(asyncio.CancelledError):
@@ -105,10 +108,8 @@ async def poll_yiimp_events(url, queue):
                     async with session.get(url) as resp:
                         resp.raise_for_status()
                         html = await resp.text()
-                new_poll_dt = datetime.datetime.utcnow()
-                await parse_events(html, queue, previous_poll_dt)
-                previous_poll_dt = new_poll_dt
-                await asyncio.sleep(5)
+                await parse_events(html, queue, share_state_d)
+                await asyncio.sleep(60)
             except asyncio.CancelledError:
                 raise
             except Exception as e:
