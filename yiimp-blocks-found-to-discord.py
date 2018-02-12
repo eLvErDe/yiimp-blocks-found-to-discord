@@ -28,7 +28,9 @@ async def parse_events(html, queue, share_state_d):
         coin_name = ' '.join(coin. split(' ')[1:])
         time = col[5].find('span').attrs['title']
         dt = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
-        if dt > share_state_d['previous_poll_dt']:
+        # Seems YIIMP first adds the block withtout the coin amount
+        # Next iteration get the proper amount
+        if dt > share_state_d['previous_poll_dt'] and coin_amount != 0:
             logger.info('New event found while parsing: %d %s found at %s', coin_amount, coin_name, dt)
             queue.put_nowait((dt, coin_name, coin_amount))
             share_state_d['previous_poll_dt'] = dt
