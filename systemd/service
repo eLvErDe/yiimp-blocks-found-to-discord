@@ -11,7 +11,7 @@ Group=nogroup
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=yiimp-blocks-found-to-discord
-ExecStartPre=/usr/bin/logger -t yiimp-blocks-found-to-discord "Starting IIMP blocks found to Discord with parameters: --pool-url $POOL_URL --discord-url $DISCORD_URL"
+ExecStartPre=/usr/bin/logger -t yiimp-blocks-found-to-discord "Starting YIIMP blocks found to Discord with parameters: --pool-url ${POOL_URL} --discord-url ${DISCORD_URL}"
 ExecStart=/usr/local/bin/yiimp-blocks-found-to-discord.py --pool-url $POOL_URL --discord-url $DISCORD_URL
 
 [Install]
