@@ -53,8 +53,6 @@ async def refresh_stocks_exchange_markets(url, d_markets):
                     except Exception as e:
                         resp.close()
                         raise e
-                    finally:
-                        await resp.release()
                     new_d_markets = { tuple(x['market_name'].split('_')): float(x['buy']) for x in d_resp }
                     # Keep reference
                     d_markets.update(new_d_markets)
@@ -88,8 +86,6 @@ async def refresh_cryptopia_markets(url, d_markets):
                     except Exception as e:
                         resp.close()
                         raise e
-                    finally:
-                        await resp.release()
                     new_d_markets = { tuple(x['Label'].split('/')): float(x['LastPrice']) for x in d_resp['Data'] }
                     # Keep reference
                     d_markets.update(new_d_markets)
@@ -132,8 +128,6 @@ async def poll_yiimp_events(url, queue):
                     except Exception as e:
                         resp.close()
                         raise e
-                    finally:
-                        await resp.release()
                 await parse_events(html, queue, share_state_d)
                 await asyncio.sleep(60)
             except asyncio.CancelledError:
@@ -186,8 +180,6 @@ async def post_events_discord(url, queue, d_markets_stocks_exchange, d_markets_c
                     except Exception as e:
                         resp.close()
                         raise e
-                    finally:
-                        await resp.release()
 
                 logger.info('Message "%s" successfully posted to Discord', message)
 
