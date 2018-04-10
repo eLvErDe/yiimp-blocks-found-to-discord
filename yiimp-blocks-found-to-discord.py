@@ -43,13 +43,21 @@ async def refresh_stocks_exchange_markets(url, d_markets):
     try:
         while True:
             try:
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(url) as resp:
+                # Compat with older aiohttp version not implementing __aexit__
+                # https://stackoverflow.com/a/37467388/8998305
+                with aiohttp.ClientSession() as session:
+                    resp = await session.get(url)
+                    try:
                         resp.raise_for_status()
                         d_resp = await resp.json()
-                        new_d_markets = { tuple(x['market_name'].split('_')): float(x['buy']) for x in d_resp }
-                        # Keep reference
-                        d_markets.update(new_d_markets)
+                    except Exception as e:
+                        resp.close()
+                        raise e
+                    finally:
+                        await resp.release()
+                    new_d_markets = { tuple(x['market_name'].split('_')): float(x['buy']) for x in d_resp }
+                    # Keep reference
+                    d_markets.update(new_d_markets)
                 logger.info('Refreshed')
                 await asyncio.sleep(60)
             except asyncio.CancelledError:
@@ -70,13 +78,21 @@ async def refresh_cryptopia_markets(url, d_markets):
     try:
         while True:
             try:
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(url) as resp:
+                # Compat with older aiohttp version not implementing __aexit__
+                # https://stackoverflow.com/a/37467388/8998305
+                with aiohttp.ClientSession() as session:
+                    resp = await session.get(url)
+                    try:
                         resp.raise_for_status()
                         d_resp = await resp.json()
-                        new_d_markets = { tuple(x['Label'].split('/')): float(x['LastPrice']) for x in d_resp['Data'] }
-                        # Keep reference
-                        d_markets.update(new_d_markets)
+                    except Exception as e:
+                        resp.close()
+                        raise e
+                    finally:
+                        await resp.release()
+                    new_d_markets = { tuple(x['Label'].split('/')): float(x['LastPrice']) for x in d_resp['Data'] }
+                    # Keep reference
+                    d_markets.update(new_d_markets)
                 logger.info('Refreshed')
                 await asyncio.sleep(60)
             except asyncio.CancelledError:
@@ -106,10 +122,18 @@ async def poll_yiimp_events(url, queue):
     try:
         while True:
             try:
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(url) as resp:
+                # Compat with older aiohttp version not implementing __aexit__
+                # https://stackoverflow.com/a/37467388/8998305
+                with aiohttp.ClientSession() as session:
+                    resp = await session.get(url)
+                    try:
                         resp.raise_for_status()
                         html = await resp.text()
+                    except Exception as e:
+                        resp.close()
+                        raise e
+                    finally:
+                        await resp.release()
                 await parse_events(html, queue, share_state_d)
                 await asyncio.sleep(60)
             except asyncio.CancelledError:
@@ -153,9 +177,17 @@ async def post_events_discord(url, queue, d_markets_stocks_exchange, d_markets_c
                     else:
                         coin_amount_btc = None
 
-                async with aiohttp.ClientSession() as session:
-                    async with session.post(url, json={ 'content': message }) as resp:
+                # Compat with older aiohttp version not implementing __aexit__
+                # https://stackoverflow.com/a/37467388/8998305
+                with aiohttp.ClientSession() as session:
+                    resp = await session.post(url, { 'content': message })
+                    try:
                         resp.raise_for_status()
+                    except Exception as e:
+                        resp.close()
+                        raise e
+                    finally:
+                        await resp.release()
 
                 logger.info('Message "%s" successfully posted to Discord', message)
 
