@@ -50,6 +50,7 @@ async def refresh_stocks_exchange_markets(url, d_markets):
                     try:
                         assert resp.status == 200, 'aiohttp call to %s failed' % url
                         d_resp = await resp.json()
+                        await resp.release()
                     except Exception as e:
                         resp.close()
                         raise e
@@ -83,6 +84,7 @@ async def refresh_cryptopia_markets(url, d_markets):
                     try:
                         assert resp.status == 200, 'aiohttp call to %s failed' % url
                         d_resp = await resp.json()
+                        await resp.release()
                     except Exception as e:
                         resp.close()
                         raise e
@@ -125,6 +127,7 @@ async def poll_yiimp_events(url, queue):
                     try:
                         assert resp.status == 200, 'aiohttp call to %s failed' % url
                         html = await resp.text()
+                        await resp.release()
                     except Exception as e:
                         resp.close()
                         raise e
@@ -177,6 +180,7 @@ async def post_events_discord(url, queue, d_markets_stocks_exchange, d_markets_c
                     resp = await session.post(url, { 'content': message })
                     try:
                         assert resp.status == 200, 'aiohttp call to %s failed' % url
+                        await resp.release()
                     except Exception as e:
                         resp.close()
                         raise e
