@@ -5,6 +5,7 @@ import sys
 import logging
 import datetime
 import argparse
+import json
 from contextlib import suppress
 import aiohttp
 from bs4 import BeautifulSoup
@@ -177,7 +178,7 @@ async def post_events_discord(url, queue, d_markets_stocks_exchange, d_markets_c
                 # Compat with older aiohttp version not implementing __aexit__
                 # https://stackoverflow.com/a/37467388/8998305
                 with aiohttp.ClientSession() as session:
-                    resp = await session.post(url, { 'content': message })
+                    resp = await session.post(url, data=json.dumps({'content': message}))
                     try:
                         assert resp.status == 200, 'aiohttp call to %s failed' % url
                         await resp.release()
