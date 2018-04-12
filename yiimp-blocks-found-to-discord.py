@@ -32,7 +32,7 @@ async def parse_events(html, queue, share_state_d):
         # Next iteration get the proper amount
         if dt > share_state_d['previous_poll_dt'] and coin_amount != 0:
             logger.info('New event found while parsing: %f %s found at %s', coin_amount, coin_name, dt)
-            queue.put_nowait((dt, coin_name, coin_amount))
+            queue.put_nowait((dt, coin_name.upper(), coin_amount))
             share_state_d['previous_poll_dt'] = dt
 
 
