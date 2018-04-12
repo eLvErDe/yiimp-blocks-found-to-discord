@@ -83,7 +83,7 @@ async def refresh_cryptopia_markets(url, d_markets):
                 with aiohttp.ClientSession() as session:
                     resp = await session.get(url)
                     try:
-                        assert resp.status == 200, 'aiohttp call to %s failed' % url
+                        assert resp.status == 200, 'aiohttp call to %s failed with code %s' % (url, resp.status)
                         d_resp = await resp.json()
                         await resp.release()
                     except Exception as e:
@@ -178,10 +178,8 @@ async def post_events_discord(url, queue, d_markets_stocks_exchange, d_markets_c
                 # Compat with older aiohttp version not implementing __aexit__
                 # https://stackoverflow.com/a/37467388/8998305
                 with aiohttp.ClientSession() as session:
-                    resp = await session.post(url, data=json.dumps({'content': message}))
+                    resp = await session.post(url, data=json.dumps({'content': message}), headers={'content-type': 'application/json'})
                     try:
-                        logger.info(resp.status)
-                        logger.info(await resp.text())
                         assert resp.status == 200, 'aiohttp call to %s failed' % url
                         await resp.release()
                     except Exception as e:
