@@ -43,3 +43,18 @@ sudo tail -n 50 -f /var/log/syslog | grep yiimp-blocks-found-to-discord
 [Discord]: https://discordapp.com/
 [stock.exchange]: https://stocks.exchange/
 [Cryptopia]: https://www.cryptopia.co.nz/
+
+# Old aiohttp version
+
+```
+[poll_yiimp_events        ] Exception occurred: AttributeError: __aexit__
+Traceback (most recent call last):
+File "/usr/local/bin/yiimp-blocks-found-to-discord.py", line 109, in poll_yiimp_events
+    async with aiohttp.ClientSession() as session:
+AttributeError: __aexit__
+```
+
+If you see theses errors, you are using and old python3-aiohttp which is not compatible with current version.
+Please get the file from the [old-aiohttp-compat-branch] instead.
+
+[old-aiohttp-compat-branch]: https://github.com/eLvErDe/yiimp-blocks-found-to-discord/tree/old-aiohttp-compat
