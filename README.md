@@ -28,6 +28,9 @@ sudo systemctl daemon-reload
 
 4. Edit `/etc/default/yiimp-blocks-found-to-discord` to set the correct pool URL and Discord web hook URL
 
+Add `?algo=all` to the found pool URL after patching YIIMP, see information below, for example:
+https://pool.ionik.fr/site/found_results?algo=all
+
 5. Mark as autostart and start it
 ```
 sudo systemctl enable yiimp-blocks-found-to-discord
