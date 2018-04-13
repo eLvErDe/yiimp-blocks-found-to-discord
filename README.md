@@ -58,3 +58,9 @@ If you see theses errors, you are using and old python3-aiohttp which is not com
 Please get the file from the [old-aiohttp-compat-branch] instead.
 
 [old-aiohttp-compat-branch]: https://github.com/eLvErDe/yiimp-blocks-found-to-discord/tree/old-aiohttp-compat
+
+# Patching YIIMP code to provide statistics for all algorithms
+
+You will need a very small patch on your YIIMP installation: https://github.com/tpruvot/yiimp/pull/256/files
+
+To make thing easier, I suggest you just overwrite found_results.php file with the one from here: https://raw.githubusercontent.com/eLvErDe/yiimp/found-results-algo-filter-as-query-param/web/yaamp/modules/site/results/found_results.php
