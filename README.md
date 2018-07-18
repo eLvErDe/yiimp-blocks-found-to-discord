@@ -10,7 +10,7 @@ Single file app all written in Python 3 asyncio, it should be very easy to modif
 
 1. Install depencencies (Python 3.5+)
 ```
-sudo apt install python3-aiohttp python3-bs4
+sudo apt install python3-aiohttp python3-bs4 python3-html5lib
 ```
 
 2. Install script
