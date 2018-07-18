@@ -219,7 +219,7 @@ if __name__ == '__main__':
 
     pool_url = config.pool_url
     discord_url = config.discord_url
-    stocks_exchange_url = 'https://stocks.exchange/api2/prices'
+    stocks_exchange_url = 'https://stocks.exchange/api2/markets'
     cryptopia_url = 'https://www.cryptopia.co.nz/api/GetMarkets'
 
     try:
